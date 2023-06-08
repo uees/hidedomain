@@ -43,6 +43,11 @@ func CreateDomain(c *gin.Context) {
 		return
 	}
 
+	// DenyDomain
+	if postData.Mode == "local" {
+		services.DenyDomain(postData.Name)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"status":  "success",
@@ -66,6 +71,12 @@ func UpdateDomain(c *gin.Context) {
 		}
 	}
 
+	// DenyDomain
+	if formData.Mode == "local" {
+		services.AllowDomain(domainName)
+		services.DenyDomain(domainName)
+	}
+
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"status":  "success",
@@ -85,6 +96,9 @@ func DeleteDomain(c *gin.Context) {
 			return
 		}
 	}
+
+	// AllowDomain
+	services.AllowDomain(domainName)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,

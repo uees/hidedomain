@@ -1,4 +1,5 @@
 export interface IUser {
+    id?: number;
     username: string;
     email: string;
     email_verified: boolean;
@@ -9,20 +10,25 @@ export interface IUser {
 }
 
 export interface IOption {
+    id?: number;
     name: string;
     value: string;
     memo: string;
 }
 
 export interface IDomain {
+    id?: number;
     name: string;
     mode: string;
+    zone_id?: string;
+    account_id?: string;
+    api_key?: string;
     memo: string;
 }
 
 export interface IWhitelist {
-    id: string;
-    domain: IDomain;
+    id?: string;
+    domain?: IDomain;
     ip: string;
     memo: string;
 }

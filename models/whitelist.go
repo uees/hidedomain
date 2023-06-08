@@ -13,3 +13,8 @@ type RuleForm struct {
 	Ip   string
 	Memo string
 }
+
+// 更新时只能更新备注信息
+type RuleUpdateForm struct {
+	Memo string
+}

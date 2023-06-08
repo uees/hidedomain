@@ -58,8 +58,8 @@ func AddIPRule(domainName string, r *models.RuleForm) error {
 	return nil
 }
 
-func UpdateIPRule(id string, r *models.RuleForm) error {
-	result := DB.Model(models.Whitelist{}).Where("id = ?", id).Updates(*r)
+func UpdateIPRule(id string, r *models.RuleUpdateForm) error {
+	result := DB.Model(models.Whitelist{}).Where("id = ?", id).Updates(r)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -71,5 +71,13 @@ func DeleteIPRule(id string) error {
 		return err
 	}
 
+	return nil
+}
+
+func GetIpRule(id string, r *models.Whitelist) error {
+	result := DB.Model(models.Whitelist{}).Where("id = ?", id).Find(r)
+	if result.Error != nil {
+		return result.Error
+	}
 	return nil
 }
