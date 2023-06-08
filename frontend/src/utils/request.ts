@@ -13,7 +13,7 @@ const service = axios.create({
 service.interceptors.request.use(
     config => {
         // do something before request is sent
-        //(config.headers as ICustomHeaders)['X-Requested-With'] = 'XMLHttpRequest'
+        (config.headers as ICustomHeaders)['X-Requested-With'] = 'XMLHttpRequest'
         const { userStore } = store;
         if (userStore.token) {
             (config.headers as ICustomHeaders).Authorization = 'Bearer ' + userStore.token

@@ -12,7 +12,10 @@ import (
 
 func initRotuer() *gin.Engine {
 	router := gin.Default()
-	router.Use(cors.Default()) // Default() allows all origins
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowHeaders = []string{"Content-Type", "Access-Token", "Authorization", "X-Requested-With"}
+	router.Use(cors.New(config)) // Default() allows all origins
 
 	api := router.Group("/api")
 	{

@@ -4,8 +4,8 @@ import { makeAutoObservable } from "mobx";
 
 export default class Site {
     pageTile = 'ZUES.PUB'
-    breadcrumb: Array<BreadItemType> = [{ title: 'home' }]
-    menuItems: ItemType[] = []
+    breadcrumb: Array<BreadItemType> = [{ title: '主页' }]
+    menuItems: ItemType[] = [{ label: '主页', key: '/' },]
 
     constructor() {
         makeAutoObservable(this);

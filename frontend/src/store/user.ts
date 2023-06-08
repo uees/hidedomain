@@ -23,7 +23,7 @@ export default class UserStore {
         const tokenData = data.data as ITokenData
         runInAction(() => {
             this.token = tokenData.token
-            setToken(data.token, tokenData.refresh_expires_in)
+            setToken(tokenData.token, tokenData.refresh_expires_in)
         })
     }
 
@@ -56,5 +56,6 @@ export default class UserStore {
         this.login_ip = ''
         this.login_ua = ''
         this.role = ''
+        this.token = ''
     }
 }

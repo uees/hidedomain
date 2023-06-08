@@ -1,8 +1,12 @@
 import { createBrowserRouter } from "react-router-dom"
-import ErrorPage from "./components/error-page";
-import HomeRoute from './views/home/route';
 import Layout from "./views/layout";
-import Login from "./views/login";
+import ErrorPage from "./views/error-page";
+import HomeRoute from './views/home/route';
+import LoginRoute from "./views/login/route";
+import DomainRoute from "./views/domain/route";
+import ProfileRoute from "./views/profile/route";
+import SettingsRoute from "./views/settings/route";
+import WhitelistRoute from "./views/whitelist/route";
 
 const router = createBrowserRouter([
     {
@@ -14,18 +18,13 @@ const router = createBrowserRouter([
                 errorElement: <ErrorPage />,
                 children: [
                     { ...HomeRoute },
-                    {
-                        //path: "contacts/:contactId/edit",
-                        //element: <EditContact />,
-                        //loader: contactLoader,
-                        //action: editAction,
-                    },
+                    { ...DomainRoute },
+                    { ...WhitelistRoute },
+                    { ...SettingsRoute },
+                    { ...ProfileRoute },
                 ],
             },
-            {
-                path: "/login",
-                element: <Login />,
-            }
+            { ...LoginRoute },
         ],
     },
 ]);

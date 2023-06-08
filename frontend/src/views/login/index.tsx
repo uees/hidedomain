@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Form, Input, Button, message, Spin } from "antd";
 import useStore from "../../hooks/useStore";
 import "../../styles/login.css";
@@ -9,12 +9,15 @@ const Login: React.FC = () => {
     site.setPageTitle('Login')
     const [loading, setLoading] = useState(false);
 
+    const navigate = useNavigate();
+
     const handleLogin = async (username: string, password: string) => {
         setLoading(true);
         try {
             await user.login({ username, password })
             await user.loadInfo()
             message.success("Login success");
+            navigate("/");
         } catch (e: any) {
             setLoading(false);
             message.error(e);
@@ -31,9 +34,11 @@ const Login: React.FC = () => {
         console.log('Failed:', errorInfo);
     };
 
+    const location = useLocation();
+
     if (user.token) {
         // redirect
-        return <Navigate replace to='/' />;
+        return <Navigate replace to='/' state={{ location }} />;
     }
 
     return (
