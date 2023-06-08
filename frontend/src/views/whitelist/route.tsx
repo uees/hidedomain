@@ -1,7 +1,7 @@
 import View from "."
 
 const route = {
-    path: "/whitelist",
+    path: "/domain/:domain/whitelist",
     element: <View />
 }
 

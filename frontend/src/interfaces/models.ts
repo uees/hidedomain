@@ -18,6 +18,7 @@ export interface IOption {
 
 export interface IDomain {
     id?: number;
+    key?: string;
     name: string;
     mode: string;
     zone_id?: string;

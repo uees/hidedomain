@@ -1,8 +1,8 @@
 import { Breadcrumb, theme } from "antd"
 import { Content } from "antd/es/layout/layout"
-import { useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import useStore from "../../../hooks/useStore";
+import { useStore } from "../../../hooks";
+import { observer } from "mobx-react-lite";
 
 const LayoutContent: React.FC = () => {
     const {
@@ -10,10 +10,6 @@ const LayoutContent: React.FC = () => {
     } = theme.useToken();
 
     const { site, user } = useStore();
-
-    useEffect(() => {
-        document.title = site.pageTile;
-    }, [site.pageTile]);
 
     return (
         <Content style={{ padding: '0 50px' }}>
@@ -29,4 +25,4 @@ const LayoutContent: React.FC = () => {
     )
 }
 
-export default LayoutContent;
+export default observer(LayoutContent);

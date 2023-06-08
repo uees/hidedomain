@@ -1,9 +1,15 @@
-import useStore from "../../hooks/useStore";
+import { useEffect } from "react";
+import { useStore, useTitle } from "../../hooks";
 
 const Home: React.FC = () => {
+
+    useTitle('Preventive active detection')
+
     const { site } = useStore();
-    site.setPageTitle('Preventive active detection');
-    site.setBreadcrumb([{ title: 'Home' }]);
+
+    useEffect(() => {
+        site.setBreadcrumb([{ title: '主页' }]);
+    })
 
     return (
         <div>Hello. it is essential to prevent active detection.</div>

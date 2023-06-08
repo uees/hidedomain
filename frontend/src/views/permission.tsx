@@ -1,6 +1,6 @@
 import React from 'react';
 import { Navigate } from "react-router-dom";
-import useStore from "../hooks/useStore";
+import { useStore } from "../hooks";
 
 export const CheckPermission: React.FC = () => {
     const { user } = useStore()

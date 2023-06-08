@@ -1,8 +1,9 @@
-import View from "."
+import View, { loader } from "."
 
 const route = {
     path: "/domain",
-    element: <View />
+    element: <View />,
+    loader: loader,
 }
 
 export default route;
