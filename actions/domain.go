@@ -4,6 +4,7 @@ import (
 	"errors"
 	"net/http"
 
+	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	"github.com/uees/hidedomain/models"
 	"github.com/uees/hidedomain/services"
@@ -25,9 +26,27 @@ func DomainList(c *gin.Context) {
 	})
 }
 
+func ShowDomain(c *gin.Context) {
+	domainName := c.Param("domain")
+	domain := models.Domain{}
+	if err := services.QueryDomainByName(domainName, &domain); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"status":  "success",
+		"data":    domain,
+	})
+}
+
 func CreateDomain(c *gin.Context) {
 	postData := models.DomainForm{}
-	c.BindJSON(&postData)
+	if err := c.BindJSON(&postData); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
 
 	if ok, _ := services.HasDomain(postData.Name); ok {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -38,7 +57,8 @@ func CreateDomain(c *gin.Context) {
 		return
 	}
 
-	if err := services.CreateDomain(&postData); err != nil {
+	domainMap := structs.Map(&postData)
+	if err := services.CreateDomain(domainMap); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -61,7 +81,8 @@ func UpdateDomain(c *gin.Context) {
 	var formData models.DomainForm
 	c.BindJSON(&formData)
 
-	if err := services.UpdateDomainByName(domainName, formData); err != nil {
+	domainMap := structs.Map(&formData)
+	if err := services.UpdateDomainByName(domainName, domainMap); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatus(http.StatusNotFound)
 			return

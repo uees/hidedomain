@@ -28,14 +28,17 @@ func initRotuer() *gin.Engine {
 
 			authorized.GET("/domains", actions.DomainList)
 			authorized.POST("/domains", actions.CreateDomain)
+			authorized.GET("/domains/:domain", actions.ShowDomain)
 			authorized.PATCH("/domains/:domain", actions.UpdateDomain)
 			authorized.DELETE("domains/:domain", actions.DeleteDomain)
 
 			authorized.GET("/domains/:domain/whitelist", actions.ShowList)
 			authorized.DELETE("/domains/:domain/whitelist", actions.ClearList)
 			authorized.POST("/domains/:domain/whitelist", actions.AddIPRule)
-			authorized.DELETE("/domains/:domain/whitelist/:ruleid", actions.DeleteIPRule)
-			authorized.PATCH("/domains/:domain/whitelist/:ruleid", actions.UpdateIPRule)
+
+			authorized.GET("/whitelist/:ruleid", actions.ShowIPRule)
+			authorized.DELETE("/whitelist/:ruleid", actions.DeleteIPRule)
+			authorized.PATCH("/whitelist/:ruleid", actions.UpdateIPRule)
 		}
 	}
 

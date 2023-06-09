@@ -73,6 +73,20 @@ func AddIPRule(c *gin.Context) {
 	})
 }
 
+func ShowIPRule(c *gin.Context) {
+	rid := c.Param("ruleid")
+	ipRule := models.Whitelist{}
+	if err := services.GetIpRule(rid, &ipRule); err != nil {
+		c.AbortWithError(http.StatusBadRequest, err)
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{
+		"success": true,
+		"status":  "success",
+		"data":    ipRule,
+	})
+}
+
 func UpdateIPRule(c *gin.Context) {
 	ruleid := c.Param("ruleid")
 	ruleForm := models.RuleUpdateForm{}

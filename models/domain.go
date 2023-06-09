@@ -1,7 +1,7 @@
 package models
 
 type Domain struct {
-	ID        uint   `gorm:"primaryKey" json:"-"`
+	ID        uint   `gorm:"primaryKey" json:"id"`
 	Name      string `gorm:"type:varchar(256);not null;uniqueIndex" json:"name"`
 	Mode      string `gorm:"type:varchar(32);" json:"mode"` // local or cf
 	ZoneID    string `gorm:"type:varchar(64);" json:"-"`    // do not save on server
@@ -11,7 +11,7 @@ type Domain struct {
 }
 
 type DomainForm struct {
-	Name string `json:"domain" binding:"required"`
+	Name string `json:"name" binding:"required"`
 	Mode string `json:"mode" binding:"required"`
 	Memo string `json:"memo"`
 }

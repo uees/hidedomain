@@ -31,12 +31,12 @@ func HasDomain(name string) (bool, error) {
 	return false, result.Error
 }
 
-func CreateDomain(domain interface{}) error {
+func CreateDomain(domain map[string]interface{}) error {
 	result := DB.Model(&models.Domain{}).Create(&domain)
 	return result.Error
 }
 
-func UpdateDomainByName(name string, data interface{}) error {
+func UpdateDomainByName(name string, data map[string]interface{}) error {
 	var domain models.Domain
 
 	if result := DB.Where("name = ?", name).First(&domain); result.Error != nil {
