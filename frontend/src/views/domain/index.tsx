@@ -35,7 +35,11 @@ const Domain: React.FC = () => {
             title: '域名',
             dataIndex: 'name',
             key: 'name',
-            render: (text) => <a>{text}</a>,
+            render: (_, { name }) => (
+                <a onClick={() => {
+                    submit(null, { method: "get", action: `/domains/${name}/edit` })
+                }}>{name}</a>
+            ),
         },
         {
             title: '模式',
@@ -63,8 +67,18 @@ const Domain: React.FC = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Link to={`/domains/${record.name}/whitelist`}>IP List</Link>
-                    <a onClick={() => submit(null, { method: "post", action: `/domains/${record.name}/destroy` })}>Delete</a>
+                    {record.mode === 'local' ?
+                        <Link to={`/domains/${record.name}/whitelist`}>IP List</Link> :
+                        <>
+                            <a>CloudflareRules</a>
+                            <a>Token</a>
+                        </>}
+                    <a onClick={() => {
+                        // eslint-disable-next-line no-restricted-globals
+                        if (confirm("Please confirm you want to delete this record.")) {
+                            submit(null, { method: "delete", action: `/domains/${record.name}/destroy` })
+                        }
+                    }}>Delete</a>
                 </Space >
             ),
         },
@@ -75,7 +89,8 @@ const Domain: React.FC = () => {
             <Button type="primary"
                 icon={<PlusOutlined />}
                 size='large'
-                style={{ marginTop: '8px', marginLeft: '8px' }} onClick={handleAddDomain}>添加</Button>
+                style={{ marginBottom: 16 }}
+                onClick={handleAddDomain}>添加</Button>
             <Table columns={columns} dataSource={domains} />
         </>
 

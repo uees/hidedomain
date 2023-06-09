@@ -6,7 +6,7 @@ import LoginRoute from "./views/login/route";
 import DomainRoute, { addDomainRoute, deleteDomainRoute, editDomainRoute } from "./views/domain/route";
 import ProfileRoute from "./views/profile/route";
 import SettingsRoute from "./views/settings/route";
-import WhitelistRoute from "./views/whitelist/route";
+import WhitelistRoute, { deleteRuleRoute } from "./views/whitelist/route";
 
 const router = createBrowserRouter([
     {
@@ -20,6 +20,7 @@ const router = createBrowserRouter([
             { ...addDomainRoute },
             { ...editDomainRoute },
             { ...deleteDomainRoute },
+            { ...deleteRuleRoute },
             { ...WhitelistRoute },
             { ...SettingsRoute },
             { ...ProfileRoute },

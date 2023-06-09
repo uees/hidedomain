@@ -21,17 +21,14 @@ export interface IDomain {
     key?: string | number;
     name: string;
     mode: string;
-    zone_id?: string;
-    account_id?: string;
-    api_key?: string;
     memo?: string;
 }
 
 export interface IWhitelist {
     id?: string | number;
     domain?: IDomain;
-    ip: string;
-    memo: string;
+    ip?: string;
+    memo?: string;
 }
 
 export interface ITokenData {

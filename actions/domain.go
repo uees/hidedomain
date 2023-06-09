@@ -4,7 +4,6 @@ import (
 	"errors"
 	"net/http"
 
-	"github.com/fatih/structs"
 	"github.com/gin-gonic/gin"
 	"github.com/uees/hidedomain/models"
 	"github.com/uees/hidedomain/services"
@@ -57,15 +56,9 @@ func CreateDomain(c *gin.Context) {
 		return
 	}
 
-	domainMap := structs.Map(&postData)
-	if err := services.CreateDomain(domainMap); err != nil {
+	if err := services.CreateDomain(&postData); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
-	}
-
-	// DenyDomain
-	if postData.Mode == "local" {
-		services.DenyDomain(postData.Name)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -81,8 +74,7 @@ func UpdateDomain(c *gin.Context) {
 	var formData models.DomainForm
 	c.BindJSON(&formData)
 
-	domainMap := structs.Map(&formData)
-	if err := services.UpdateDomainByName(domainName, domainMap); err != nil {
+	if err := services.UpdateDomainByName(domainName, &formData); err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.AbortWithStatus(http.StatusNotFound)
 			return
@@ -90,12 +82,6 @@ func UpdateDomain(c *gin.Context) {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-	}
-
-	// DenyDomain
-	if formData.Mode == "local" {
-		services.AllowDomain(domainName)
-		services.DenyDomain(domainName)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -117,9 +103,6 @@ func DeleteDomain(c *gin.Context) {
 			return
 		}
 	}
-
-	// AllowDomain
-	services.AllowDomain(domainName)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,

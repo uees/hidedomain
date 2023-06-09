@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 
+	"github.com/fatih/structs"
 	"github.com/uees/hidedomain/models"
 )
 
@@ -16,7 +17,7 @@ func GetWhiteListByDomain(domainName string, whitelists *[]models.Whitelist) err
 		return errors.New("cf mode")
 	}
 
-	if err := DB.Where("domain_id = ?", domain.ID).Find(whitelists).Error; err != nil {
+	if err := DB.Joins("Domain", DB.Where("domain_id = ?", domain.ID)).Find(whitelists).Error; err != nil {
 		return err
 	}
 
@@ -50,6 +51,16 @@ func AddIPRule(domainName string, r *models.RuleForm) error {
 		return errors.New("cf mode")
 	}
 
+	// 防止重复
+	find := models.Whitelist{}
+	result := DB.Where("ip = ? AND domain_id = ?", r.Ip, domain.ID).Find(&find)
+	if result.Error != nil {
+		return result.Error
+	}
+	if result.RowsAffected > 0 {
+		return nil
+	}
+
 	rule := models.Whitelist{DomainID: domain.ID, Ip: r.Ip, Memo: r.Memo}
 	if err := DB.Create(&rule).Error; err != nil {
 		return err
@@ -59,7 +70,7 @@ func AddIPRule(domainName string, r *models.RuleForm) error {
 }
 
 func UpdateIPRule(id string, r *models.RuleUpdateForm) error {
-	result := DB.Model(models.Whitelist{}).Where("id = ?", id).Updates(r)
+	result := DB.Model(models.Whitelist{}).Where("id = ?", id).Updates(structs.Map(r))
 	if result.Error != nil {
 		return result.Error
 	}
@@ -75,7 +86,7 @@ func DeleteIPRule(id string) error {
 }
 
 func GetIpRule(id string, r *models.Whitelist) error {
-	result := DB.Model(models.Whitelist{}).Where("id = ?", id).Find(r)
+	result := DB.Joins("Domain").Where("id = ?", id).Find(r)
 	if result.Error != nil {
 		return result.Error
 	}

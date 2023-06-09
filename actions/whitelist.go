@@ -26,21 +26,10 @@ func ShowList(c *gin.Context) {
 // 清理ip列表，并清除iptables ip 列表
 func ClearList(c *gin.Context) {
 	domain := c.Param("domain")
-	var wlists []models.Whitelist
-
-	if err := services.GetWhiteListByDomain(domain, &wlists); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
-		return
-	}
 
 	if err := services.ClearWhiteListByDomain(domain); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
-	}
-
-	// clear all ip
-	for _, rule := range wlists {
-		services.RemoveIP(rule.Ip)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
@@ -62,9 +51,6 @@ func AddIPRule(c *gin.Context) {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-
-	// AllowIP
-	services.AllowIP(ruleForm.Ip)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
@@ -108,20 +94,11 @@ func UpdateIPRule(c *gin.Context) {
 
 func DeleteIPRule(c *gin.Context) {
 	rid := c.Param("ruleid")
-	rule := models.Whitelist{}
-
-	if err := services.GetIpRule(rid, &rule); err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
-		return
-	}
 
 	if err := services.DeleteIPRule(rid); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-
-	// RemoveIP
-	services.RemoveIP(rule.Ip)
 
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
