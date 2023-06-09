@@ -5,6 +5,10 @@ export function domainList() {
     return request.get('/domains')
 }
 
+export function getDomain(name: string) {
+    return request.get(`/domains/${name}`)
+}
+
 export function createDomain(domain: IDomain) {
     return request.post('/domains', domain)
 }

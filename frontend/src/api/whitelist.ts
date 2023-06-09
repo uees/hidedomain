@@ -13,10 +13,14 @@ export const addIPRule = (domain: string, rule: IWhitelist) => {
     return request.post(`/domains/${domain}/whitelist`, rule)
 }
 
-export const deleteIPRule = (domain: string, ruleID: number) => {
-    return request.delete(`/domains/${domain}/whitelist/${ruleID}`)
+export const showIPRule = (ruleID: number | string) => {
+    return request.get(`whitelist/${ruleID}`);
 }
 
-export const updateIPRule = (domain: string, ruleID: number, rule: IWhitelist) => {
-    return request.patch(`/domains/${domain}/whitelist/${ruleID}`, rule)
+export const deleteIPRule = (ruleID: number | string) => {
+    return request.delete(`/whitelist/${ruleID}`)
+}
+
+export const updateIPRule = (ruleID: number | string, rule: IWhitelist) => {
+    return request.patch(`/whitelist/${ruleID}`, rule)
 }

@@ -3,7 +3,17 @@ import { Footer } from "antd/es/layout/layout"
 import LayoutContent from "./Content";
 import LayoutHeader from "./Header";
 import { CheckPermission } from "../permission";
+import { store } from '../../store'
 import '../../styles/style.css';
+
+export async function loader() {
+    const { userStore } = store;
+    if (userStore.token && !userStore.username) {
+        await userStore.loadInfo();
+    }
+
+    return { user: userStore }
+}
 
 const Layout: React.FC = () => {
 

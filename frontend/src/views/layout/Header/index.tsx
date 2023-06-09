@@ -21,7 +21,7 @@ const LayoutHeader: React.FC = () => {
                 },
                 {
                     label: '域名管理',
-                    key: '/domain',
+                    key: '/domains',
                     icon: <BulbOutlined />,
                 },
                 {
