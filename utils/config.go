@@ -2,7 +2,6 @@ package utils
 
 import (
 	"os"
-	"path"
 
 	"gopkg.in/yaml.v2"
 )
@@ -18,7 +17,7 @@ type Config struct {
 }
 
 func (conf *Config) LoadConf() error {
-	data, err := os.ReadFile(path.Join(BaseDir(), "config.yml"))
+	data, err := os.ReadFile("config.yml")
 	if err != nil {
 		return err
 	}

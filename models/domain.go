@@ -22,8 +22,8 @@ type Domain struct {
 func (d *Domain) BeforeSave(tx *gorm.DB) error {
 	if d.ApiKey != "" {
 		api, ctx := utils.InitCfApi(d.ApiKey)
-		d.loadAccountID(api, ctx)
-		d.loadListID(api, ctx)
+		d.loadAccountID(tx, api, ctx)
+		d.loadListID(tx, api, ctx)
 	}
 	return nil
 }
@@ -51,7 +51,7 @@ func (d *Domain) AfterDelete(tx *gorm.DB) (err error) {
 	return
 }
 
-func (d *Domain) loadAccountID(api *cloudflare.API, ctx context.Context) {
+func (d *Domain) loadAccountID(tx *gorm.DB, api *cloudflare.API, ctx context.Context) {
 	if d.ApiKey == "" || d.Mode == "local" {
 		return
 	}
@@ -65,11 +65,11 @@ func (d *Domain) loadAccountID(api *cloudflare.API, ctx context.Context) {
 
 		// 默认获取第一个账号ID
 		d.AccountID = accounts[0].ID
-		//tx.Save(d)
+		tx.Save(d)
 	}
 }
 
-func (d *Domain) loadListID(api *cloudflare.API, ctx context.Context) {
+func (d *Domain) loadListID(tx *gorm.DB, api *cloudflare.API, ctx context.Context) {
 	if d.ApiKey == "" || d.Mode == "local" || d.AccountID == "" {
 		return
 	}
@@ -89,7 +89,7 @@ func (d *Domain) loadListID(api *cloudflare.API, ctx context.Context) {
 			// 默认获取 "my_ip_list"
 			if list.Name == "my_ip_list" {
 				d.ListID = list.ID
-				//tx.Save(d)
+				tx.Save(d)
 				break
 			}
 		}
