@@ -35,3 +35,11 @@ type RuleForm struct {
 type RuleUpdateForm struct {
 	Memo string
 }
+
+// 统一 local data 和 cloudflare data
+type Rule struct {
+	Key    string `json:"key"`
+	Domain string `json:"domain"`
+	Ip     string `json:"ip"`
+	Memo   string `json:"memo"`
+}

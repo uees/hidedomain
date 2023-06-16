@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/uees/hidedomain/models"
 	"github.com/uees/hidedomain/services"
+	"github.com/uees/hidedomain/utils"
 )
 
 func Login(c *gin.Context) {
@@ -39,7 +40,7 @@ func Login(c *gin.Context) {
 	}
 
 	hours := 24 * time.Hour * time.Duration(1) // 24 h
-	token, _ := services.GenerateJWT(form.Username, hours)
+	token, _ := utils.GenerateJWT(form.Username, hours)
 	c.JSON(http.StatusOK, gin.H{
 		"success": true,
 		"status":  "success",

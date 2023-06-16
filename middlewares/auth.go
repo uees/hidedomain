@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v4/request"
 	"github.com/uees/hidedomain/models"
-	"github.com/uees/hidedomain/services"
+	"github.com/uees/hidedomain/utils"
 )
 
 func AuthRequired() gin.HandlerFunc {
@@ -20,7 +20,7 @@ func AuthRequired() gin.HandlerFunc {
 			return
 		}
 
-		claims, err := services.ParseToken(tokenString)
+		claims, err := utils.ParseToken(tokenString)
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"status":  "unauthorized",
@@ -30,7 +30,7 @@ func AuthRequired() gin.HandlerFunc {
 		}
 
 		var user models.User
-		result := services.DB.Where("username = ?", claims.User).First(&user)
+		result := utils.DB.Where("username = ?", claims.User).First(&user)
 		if result.Error != nil {
 			c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{
 				"status":  "unauthorized",

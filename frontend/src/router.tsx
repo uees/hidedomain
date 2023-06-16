@@ -3,7 +3,11 @@ import Layout, { loader } from "./views/layout";
 import ErrorPage from "./views/error-page";
 import HomeRoute from './views/home/route';
 import LoginRoute from "./views/login/route";
-import DomainRoute, { addDomainRoute, deleteDomainRoute, editDomainRoute } from "./views/domain/route";
+import DomainRoute, {
+    addDomainRoute,
+    deleteDomainRoute,
+    editDomainRoute,
+} from "./views/domain/route";
 import ProfileRoute from "./views/profile/route";
 import SettingsRoute from "./views/settings/route";
 import WhitelistRoute, { deleteRuleRoute } from "./views/whitelist/route";

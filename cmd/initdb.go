@@ -6,14 +6,15 @@ import (
 
 	"github.com/uees/hidedomain/models"
 	"github.com/uees/hidedomain/services"
+	"github.com/uees/hidedomain/utils"
 	"gorm.io/gorm"
 )
 
 func main() {
-	services.DB.AutoMigrate(&models.User{}, &models.Whitelist{}, &models.Option{}, &models.Domain{})
+	utils.DB.AutoMigrate(&models.User{}, &models.Whitelist{}, &models.Option{}, &models.Domain{})
 
 	var user models.User
-	result := services.DB.First(&user, "username = ?", "admin")
+	result := utils.DB.First(&user, "username = ?", "admin")
 	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		services.AddUser("admin", "admin@localhost", "yourpass")
 	}

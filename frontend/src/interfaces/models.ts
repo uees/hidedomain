@@ -13,7 +13,7 @@ export interface IOption {
     id?: string | number;
     name: string;
     value: string;
-    memo: string;
+    memo?: string;
 }
 
 export interface IDomain {
@@ -22,6 +22,7 @@ export interface IDomain {
     name: string;
     mode: string;
     memo?: string;
+    token?: string;
 }
 
 export interface IWhitelist {

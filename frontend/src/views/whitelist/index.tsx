@@ -3,7 +3,6 @@ import React from 'react';
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect, useLoaderData, useNavigate, useParams, useSubmit } from "react-router-dom";
 import { Button, Popconfirm, Table, message } from 'antd';
 import { addIPRule, deleteIPRule, showList, updateIPRule } from "../../api/whitelist";
-import { IDomain, IWhitelist } from "../../interfaces/models"
 import { EditableRow, EditableCell } from './row'
 import { getIP } from '../../api/ip';
 import './style.css';
@@ -17,22 +16,13 @@ export interface IPRuleDataType {
 
 export async function loader({ params }: LoaderFunctionArgs) {
     const { data } = await showList(params.domain as string)
-    const wlist = data.data as IWhitelist[]
-    const ipRules: IPRuleDataType[] = []
-    for (let item of wlist) {
-        ipRules.push({
-            key: item.id,
-            domain: (item.domain as IDomain).name,
-            ip: item.ip,
-            memo: item.memo,
-        })
-    }
+    const ipRules = data.data as IPRuleDataType[];
     return { ipRules }
 }
 
 export async function deleteRuleAction({ params }: ActionFunctionArgs) {
     const { ruleid, domain } = params as { ruleid: string, domain: string }
-    await deleteIPRule(ruleid)
+    await deleteIPRule(domain, ruleid)
     return redirect(`/domains/${domain}/whitelist`)
 }
 
@@ -80,16 +70,16 @@ const App: React.FC = () => {
         // console.log(ip, network, version)
         if (version === "IPv4") {
             await addIPRule(domain, { ip: network, memo: ip })
-            message.success("添加成功");
+            // message.success("add success");
             return navigate(`/domains/${domain}/whitelist`, { replace: true })
         } else {
-            message.error("请先禁用IPV6！");
+            message.error("please disable IPV6");
         }
     };
 
     const handleSave = async (row: IPRuleDataType) => {
-        await updateIPRule(row.key as string, { memo: row.memo })
-        message.success("修改成功");
+        await updateIPRule(domain, row.key as string, { memo: row.memo })
+        message.success("update success");
         return navigate(`/domains/${domain}/whitelist`, { replace: true })
     };
 

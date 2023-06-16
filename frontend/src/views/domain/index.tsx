@@ -11,7 +11,7 @@ import { domainList } from '../../api/domain';
 export async function loader({ request }: LoaderFunctionArgs) {
     const { data } = await domainList()
 
-    // 添加 key fix antd error
+    // add key, fix antd warning
     let domains = data.data as IDomain[];
     for (let domain of domains) {
         domain.key = domain.id
@@ -67,12 +67,7 @@ const Domain: React.FC = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    {record.mode === 'local' ?
-                        <Link to={`/domains/${record.name}/whitelist`}>IP List</Link> :
-                        <>
-                            <a>CloudflareRules</a>
-                            <a>Token</a>
-                        </>}
+                    <Link to={`/domains/${record.name}/whitelist`}>IP List</Link>
                     <a onClick={() => {
                         // eslint-disable-next-line no-restricted-globals
                         if (confirm("Please confirm you want to delete this record.")) {

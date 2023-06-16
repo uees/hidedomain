@@ -10,7 +10,7 @@ import (
 
 func ShowList(c *gin.Context) {
 	domain := c.Param("domain")
-	var wlists []models.Whitelist
+	wlists := []models.Rule{}
 	if err := services.GetWhiteListByDomain(domain, &wlists); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
@@ -61,8 +61,9 @@ func AddIPRule(c *gin.Context) {
 
 func ShowIPRule(c *gin.Context) {
 	rid := c.Param("ruleid")
-	ipRule := models.Whitelist{}
-	if err := services.GetIpRule(rid, &ipRule); err != nil {
+	domain := c.Param("domain")
+	ipRule := models.Rule{}
+	if err := services.GetIpRule(domain, rid, &ipRule); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -75,12 +76,13 @@ func ShowIPRule(c *gin.Context) {
 
 func UpdateIPRule(c *gin.Context) {
 	ruleid := c.Param("ruleid")
+	domain := c.Param("domain")
 	ruleForm := models.RuleUpdateForm{}
 	if err := c.BindJSON(&ruleForm); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
-	if err := services.UpdateIPRule(ruleid, &ruleForm); err != nil {
+	if err := services.UpdateIPRule(domain, ruleid, &ruleForm); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
@@ -94,8 +96,9 @@ func UpdateIPRule(c *gin.Context) {
 
 func DeleteIPRule(c *gin.Context) {
 	rid := c.Param("ruleid")
+	domain := c.Param("domain")
 
-	if err := services.DeleteIPRule(rid); err != nil {
+	if err := services.DeleteIPRule(domain, rid); err != nil {
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}

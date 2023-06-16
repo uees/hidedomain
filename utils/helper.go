@@ -2,12 +2,16 @@ package utils
 
 import (
 	"bytes"
+	"context"
 	"fmt"
+	"log"
 	"os/exec"
 	"path"
 	"runtime"
 	"strconv"
 	"strings"
+
+	"github.com/cloudflare/cloudflare-go"
 )
 
 func IPV4Belong(ip, cidr string) bool {
@@ -49,4 +53,14 @@ func ShellRun(shell string) (string, error) {
 		return "", fmt.Errorf("exec: [%s] err: %v", shell, errBuf.String())
 	}
 	return strings.TrimSpace(outBuf.String()), nil
+}
+
+func InitCfApi(token string) (*cloudflare.API, context.Context) {
+	ctx := context.Background()
+	api, err := cloudflare.NewWithAPIToken(token)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return api, ctx
 }

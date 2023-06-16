@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button, Form, Input, Radio, } from 'antd';
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect, useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import { createDomain, deleteDomain, getDomain, updateDomain } from '../../api/domain';
@@ -42,6 +42,11 @@ const DomainForm: React.FC = () => {
         return navigate("/domains")
     }
 
+    const [modeValue, setModeValue] = useState<string>(data.mode);
+    const onModeChange = ({ mode }: { mode: string }) => {
+        setModeValue(mode)
+    }
+
     return (
         <Form
             labelCol={{ span: 4 }}
@@ -49,6 +54,7 @@ const DomainForm: React.FC = () => {
             layout="horizontal"
             style={{ maxWidth: 600 }}
             initialValues={data}
+            onValuesChange={onModeChange}
             onFinish={onFinish}
         >
             <Form.Item
@@ -67,6 +73,10 @@ const DomainForm: React.FC = () => {
                     buttonStyle="solid"
                 />
             </Form.Item>
+            {modeValue === 'cf' &&
+                <Form.Item label="Token" name='token'>
+                    <Input />
+                </Form.Item>}
             <Form.Item
                 label="备注"
                 name='memo'

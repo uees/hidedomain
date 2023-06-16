@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/uees/hidedomain/actions"
 	"github.com/uees/hidedomain/middlewares"
-	"github.com/uees/hidedomain/services"
+	"github.com/uees/hidedomain/utils"
 )
 
 func initRotuer() *gin.Engine {
@@ -36,9 +36,9 @@ func initRotuer() *gin.Engine {
 			authorized.DELETE("/domains/:domain/whitelist", actions.ClearList)
 			authorized.POST("/domains/:domain/whitelist", actions.AddIPRule)
 
-			authorized.GET("/whitelist/:ruleid", actions.ShowIPRule)
-			authorized.DELETE("/whitelist/:ruleid", actions.DeleteIPRule)
-			authorized.PATCH("/whitelist/:ruleid", actions.UpdateIPRule)
+			authorized.GET("/domains/:domain/whitelist/:ruleid", actions.ShowIPRule)
+			authorized.DELETE("/domains/:domain/whitelist/:ruleid", actions.DeleteIPRule)
+			authorized.PATCH("/domains/:domain/whitelist/:ruleid", actions.UpdateIPRule)
 		}
 	}
 
@@ -50,6 +50,7 @@ func initRotuer() *gin.Engine {
 }
 
 func main() {
+	utils.InitLoger()
 	rotuer := initRotuer()
-	rotuer.Run(services.Conf.Listen)
+	rotuer.Run(utils.Conf.Listen)
 }

@@ -1,25 +1,7 @@
 package services
 
-import (
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
-)
+import "github.com/uees/hidedomain/utils"
 
-var (
-	Conf *Config = new(Config)
-	DB   *gorm.DB
-)
+var db = utils.DB
 
-func init() {
-	var err error
-
-	err = Conf.LoadConf()
-	if err != nil {
-		panic(err)
-	}
-
-	DB, err = gorm.Open(sqlite.Open(Conf.DSN), &gorm.Config{})
-	if err != nil {
-		panic(err)
-	}
-}
+// var conf = utils.Conf

@@ -1,10 +1,9 @@
-package services
+package utils
 
 import (
 	"os"
 	"path"
 
-	"github.com/uees/hidedomain/utils"
 	"gopkg.in/yaml.v2"
 )
 
@@ -14,11 +13,12 @@ type Config struct {
 	Debug     bool   `yaml:"debug"`
 	DbDriver  string `yaml:"driver"`
 	DSN       string `yaml:"dsn"`
+	LogFile   string `yaml:"logfile"`
 	//KeyMap    map[string]string `yaml:"keymap"`
 }
 
 func (conf *Config) LoadConf() error {
-	data, err := os.ReadFile(path.Join(utils.BaseDir(), "config.yml"))
+	data, err := os.ReadFile(path.Join(BaseDir(), "config.yml"))
 	if err != nil {
 		return err
 	}

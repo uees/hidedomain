@@ -6,7 +6,7 @@ import (
 )
 
 func GetAllDomains(domains *[]models.Domain) error {
-	result := DB.Find(&domains)
+	result := db.Find(&domains)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -15,7 +15,7 @@ func GetAllDomains(domains *[]models.Domain) error {
 }
 
 func QueryDomainByName(name string, domain *models.Domain) error {
-	result := DB.Where("name = ?", name).First(&domain)
+	result := db.Where("name = ?", name).First(&domain)
 	if result.Error != nil {
 		return result.Error
 	}
@@ -24,7 +24,7 @@ func QueryDomainByName(name string, domain *models.Domain) error {
 
 func HasDomain(name string) (bool, error) {
 	var domain models.Domain
-	result := DB.Where("name = ?", name).First(&domain)
+	result := db.Where("name = ?", name).First(&domain)
 	if result.RowsAffected > 0 {
 		return true, nil
 	}
@@ -33,18 +33,18 @@ func HasDomain(name string) (bool, error) {
 }
 
 func CreateDomain(domain *models.DomainForm) error {
-	result := DB.Model(&models.Domain{}).Create(structs.Map(domain))
+	result := db.Model(&models.Domain{}).Create(structs.Map(domain))
 	return result.Error
 }
 
 func UpdateDomainByName(name string, data *models.DomainForm) error {
 	var domain models.Domain
 
-	if result := DB.Where("name = ?", name).First(&domain); result.Error != nil {
+	if result := db.Where("name = ?", name).First(&domain); result.Error != nil {
 		return result.Error
 	}
 
-	if result := DB.Model(&domain).Updates(structs.Map(data)); result.Error != nil {
+	if result := db.Model(&domain).Updates(structs.Map(data)); result.Error != nil {
 		return result.Error
 	}
 
@@ -54,11 +54,11 @@ func UpdateDomainByName(name string, data *models.DomainForm) error {
 func DeleteDomainByName(name string) error {
 	var domain models.Domain
 
-	if result := DB.Where("name = ?", name).First(&domain); result.Error != nil {
+	if result := db.Where("name = ?", name).First(&domain); result.Error != nil {
 		return result.Error
 	}
 
-	if result := DB.Delete(&domain); result.Error != nil {
+	if result := db.Delete(&domain); result.Error != nil {
 		return result.Error
 	}
 

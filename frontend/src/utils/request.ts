@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { store } from '../store';
-import { ICustomHeaders } from '../interfaces/headers';
 
 // create an axios instance
 const service = axios.create({
@@ -13,10 +12,11 @@ const service = axios.create({
 service.interceptors.request.use(
     config => {
         // do something before request is sent
-        (config.headers as ICustomHeaders)['X-Requested-With'] = 'XMLHttpRequest'
+        // config.headers['X-Requested-With'] = 'XMLHttpRequest'
+        config.headers['Content-Type'] = 'application/json';
         const { userStore } = store;
         if (userStore.token) {
-            (config.headers as ICustomHeaders).Authorization = 'Bearer ' + userStore.token
+            config.headers.Authorization = 'Bearer ' + userStore.token
         }
         return config
     },

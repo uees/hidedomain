@@ -3,3 +3,4 @@ secret_key: 'secret_key'
 debug: true
 driver: 'sqlite'
 dsn: 'data/db.sqlite'
+logfile: 'zues.log'
