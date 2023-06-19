@@ -87,7 +87,7 @@ func ClearWhiteListByDomain(domainName string) error {
 		return err
 	}
 	for _, rule := range list {
-		rule.RemoveIP(rule.Ip)
+		rule.RemoveIP(domainName)
 	}
 
 	if err := db.Delete(&models.Whitelist{}, "domain_id = ?", domain.ID).Error; err != nil {
@@ -174,7 +174,7 @@ func DeleteIPRule(domainName string, id string) error {
 	if domain.Mode == "local" {
 		rule := models.Whitelist{}
 		db.First(&rule, id)
-		if err := rule.RemoveIP(rule.Ip); err != nil {
+		if err := rule.RemoveIP(domainName); err != nil {
 			return err
 		}
 
