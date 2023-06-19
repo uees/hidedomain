@@ -25,20 +25,20 @@ func AllowDomain(domain string) (string, error) {
 	return ShellRun(cmdStr)
 }
 
-func AllowIP(ip string) (string, error) {
+func AllowIP(domain string, ip string) (string, error) {
 	if runtime.GOOS != "linux" {
 		return "", fmt.Errorf("no support os")
 	}
-	cmdStr := fmt.Sprintf("iptables -I INPUT -s %s -p TCP --dport 443 -j ACCEPT", ip)
+	cmdStr := fmt.Sprintf("iptables -I INPUT -s %s -p TCP --dport 443 -m string --string \"%s\" --algo bm -j ACCEPT", ip, domain)
 	log.Println(cmdStr)
 	return ShellRun(cmdStr)
 }
 
-func RemoveIP(ip string) (string, error) {
+func RemoveIP(domain string, ip string) (string, error) {
 	if runtime.GOOS != "linux" {
 		return "", fmt.Errorf("no support os")
 	}
-	cmdStr := fmt.Sprintf("iptables -D INPUT -s %s -p TCP --dport 443 -j ACCEPT", ip)
+	cmdStr := fmt.Sprintf("iptables -D INPUT -s %s -p TCP --dport 443 -m string --string \"%s\" --algo bm -j ACCEPT", ip, domain)
 	log.Println(cmdStr)
 	return ShellRun(cmdStr)
 }

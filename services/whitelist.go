@@ -52,7 +52,7 @@ func GetWhiteListByDomain(domainName string, whitelists *[]models.Rule) error {
 	}
 
 	localData := []models.Whitelist{}
-	if err := db.Where("domain_id = ?", domain.ID).Find(&localData).Error; err != nil {
+	if err := db.Joins("Domain", db.Where("domain_id = ?", domain.ID)).Find(&localData).Error; err != nil {
 		return err
 	}
 
@@ -201,7 +201,7 @@ func GetIpRule(domainName string, id string, r *models.Rule) error {
 
 	if domain.Mode == "local" {
 		rule := models.Whitelist{}
-		result := db.Where("id = ?", id).Find(&rule)
+		result := db.Joins("Domain").Where("id = ?", id).Find(&rule)
 		if result.Error != nil {
 			return result.Error
 		}

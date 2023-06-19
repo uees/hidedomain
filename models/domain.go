@@ -62,11 +62,6 @@ func (d *Domain) AfterCreate(tx *gorm.DB) (err error) {
 }
 
 func (d *Domain) BeforeDelete(tx *gorm.DB) (err error) {
-	tx.Where("domain_id = ?", d.ID).Delete(&Whitelist{})
-	return
-}
-
-func (d *Domain) AfterDelete(tx *gorm.DB) (err error) {
 	// AllowDomain
 	if _, err := utils.AllowDomain(d.Name); err != nil {
 		log.Println(err)
@@ -74,6 +69,8 @@ func (d *Domain) AfterDelete(tx *gorm.DB) (err error) {
 	if _, err := utils.SaveRules(); err != nil {
 		log.Println(err)
 	}
+
+	tx.Where("domain_id = ?", d.ID).Delete(&Whitelist{})
 	return
 }
 

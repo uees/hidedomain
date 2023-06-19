@@ -18,7 +18,7 @@ type Whitelist struct {
 
 func (wl *Whitelist) AfterCreate(tx *gorm.DB) (err error) {
 	// AllowIP
-	if _, err := utils.AllowIP(wl.Ip); err != nil {
+	if _, err := utils.AllowIP(wl.Domain.Name, wl.Ip); err != nil {
 		log.Println(err)
 	}
 	if _, err := utils.SaveRules(); err != nil {
@@ -27,9 +27,9 @@ func (wl *Whitelist) AfterCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (wl *Whitelist) AfterDelete(tx *gorm.DB) (err error) {
+func (wl *Whitelist) BeforeDelete(tx *gorm.DB) (err error) {
 	// RemoveIP
-	if _, err := utils.RemoveIP(wl.Ip); err != nil {
+	if _, err := utils.RemoveIP(wl.Domain.Name, wl.Ip); err != nil {
 		log.Println(err)
 	}
 	if _, err := utils.SaveRules(); err != nil {
