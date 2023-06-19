@@ -43,14 +43,14 @@ var BaseDir = func() string {
 	return abPath
 }
 
-func ShellRun(shell string) (string, error) {
+func ShellRun(name string, arg ...string) (string, error) {
 	var outBuf, errBuf bytes.Buffer
-	cmd := exec.Command(shell)
+	cmd := exec.Command(name, arg...)
 	cmd.Stdout = &outBuf
 	cmd.Stderr = &errBuf
 	err := cmd.Run()
 	if err != nil {
-		return "", fmt.Errorf("exec: [%s] err: %v", shell, errBuf.String())
+		return "", fmt.Errorf("exec: [%s] err: %v", cmd.String(), errBuf.String())
 	}
 	return strings.TrimSpace(outBuf.String()), nil
 }
