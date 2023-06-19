@@ -33,7 +33,14 @@ func HasDomain(name string) (bool, error) {
 }
 
 func CreateDomain(domain *models.DomainForm) error {
-	result := db.Model(&models.Domain{}).Create(structs.Map(domain))
+	// When creating from map, hooks won’t be invoked
+	// result := db.Model(&models.Domain{}).Create(structs.Map(domain))
+	result := db.Create(&models.Domain{
+		Name:   domain.Name,
+		Mode:   domain.Mode,
+		ApiKey: domain.ApiKey,
+		Memo:   domain.Memo,
+	})
 	return result.Error
 }
 

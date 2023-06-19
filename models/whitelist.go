@@ -4,7 +4,6 @@ import (
 	"log"
 
 	"github.com/uees/hidedomain/utils"
-	"gorm.io/gorm"
 )
 
 // Whitelist IP 白名单，仅仅保存 local 模式的数据
@@ -16,9 +15,9 @@ type Whitelist struct {
 	Memo     string `gorm:"type:varchar(256);" json:"memo"`
 }
 
-func (wl *Whitelist) AfterCreate(tx *gorm.DB) (err error) {
+func (wl *Whitelist) AllowIP(domain string) (err error) {
 	// AllowIP
-	if _, err := utils.AllowIP(wl.Domain.Name, wl.Ip); err != nil {
+	if _, err := utils.AllowIP(domain, wl.Ip); err != nil {
 		log.Println(err)
 	}
 	if _, err := utils.SaveRules(); err != nil {
@@ -27,9 +26,9 @@ func (wl *Whitelist) AfterCreate(tx *gorm.DB) (err error) {
 	return
 }
 
-func (wl *Whitelist) BeforeDelete(tx *gorm.DB) (err error) {
+func (wl *Whitelist) RemoveIP(domain string) (err error) {
 	// RemoveIP
-	if _, err := utils.RemoveIP(wl.Domain.Name, wl.Ip); err != nil {
+	if _, err := utils.RemoveIP(domain, wl.Ip); err != nil {
 		log.Println(err)
 	}
 	if _, err := utils.SaveRules(); err != nil {

@@ -52,7 +52,7 @@ func GetWhiteListByDomain(domainName string, whitelists *[]models.Rule) error {
 	}
 
 	localData := []models.Whitelist{}
-	if err := db.Joins("Domain", db.Where("domain_id = ?", domain.ID)).Find(&localData).Error; err != nil {
+	if err := db.Where("domain_id = ?", domain.ID).Find(&localData).Error; err != nil {
 		return err
 	}
 
@@ -79,6 +79,15 @@ func ClearWhiteListByDomain(domainName string) error {
 		// nothing to do
 		log.Println("cf mode not to do clear all list")
 		return nil
+	}
+
+	// Remove ips
+	list := []models.Whitelist{}
+	if err := db.Where("domain_id = ?", domain.ID).Find(&list).Error; err != nil {
+		return err
+	}
+	for _, rule := range list {
+		rule.RemoveIP(rule.Ip)
 	}
 
 	if err := db.Delete(&models.Whitelist{}, "domain_id = ?", domain.ID).Error; err != nil {
@@ -132,6 +141,8 @@ func AddIPRule(domainName string, r *models.RuleForm) error {
 		return err
 	}
 
+	rule.AllowIP(domainName)
+
 	return nil
 }
 
@@ -161,6 +172,12 @@ func DeleteIPRule(domainName string, id string) error {
 	}
 
 	if domain.Mode == "local" {
+		rule := models.Whitelist{}
+		db.First(&rule, id)
+		if err := rule.RemoveIP(rule.Ip); err != nil {
+			return err
+		}
+
 		if err := db.Where("id = ? AND domain_id = ?", id, domain.ID).Delete(&models.Whitelist{}).Error; err != nil {
 			return err
 		}
@@ -201,7 +218,7 @@ func GetIpRule(domainName string, id string, r *models.Rule) error {
 
 	if domain.Mode == "local" {
 		rule := models.Whitelist{}
-		result := db.Joins("Domain").Where("id = ?", id).Find(&rule)
+		result := db.Where("id = ?", id).Find(&rule)
 		if result.Error != nil {
 			return result.Error
 		}
