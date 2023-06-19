@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { message } from 'antd';
 import { store } from '../store';
 
 // create an axios instance
@@ -41,14 +42,43 @@ service.interceptors.response.use(
             console.log('err' + error) // for debug
         }
 
+        const msg = getErrInfo(error);
+        message.error(msg);
+
         if (error.response && error.response.status === 401) {
             const { userStore } = store;
             userStore.logout();
-            window.location.reload();
+            // window.location.reload();
         }
 
         return Promise.reject(error)
     }
 )
+
+function getErrInfo(error: any) {
+    if (error.message) {
+        return error.message;
+    }
+
+    const { response } = error;
+    if (!response) {
+        return ''
+    }
+
+    if (response.message) {
+        return response.message;
+    }
+
+    let { data, status } = response
+    if (data && data.message) {
+        return data.message;
+    }
+
+    if (status) {
+        return status;
+    }
+
+    return "";
+}
 
 export default service

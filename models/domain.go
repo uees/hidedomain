@@ -28,6 +28,22 @@ func (d *Domain) BeforeSave(tx *gorm.DB) error {
 	return nil
 }
 
+func (d *Domain) AfterSave(tx *gorm.DB) error {
+	if d.Mode == "local" {
+		if _, err := utils.AllowDomain(d.Name); err != nil {
+			log.Println(err)
+		}
+		if _, err := utils.DenyDomain(d.Name); err != nil {
+			log.Println(err)
+		}
+		if _, err := utils.SaveRules(); err != nil {
+			log.Println(err)
+		}
+	}
+
+	return nil
+}
+
 func (d *Domain) BeforeCreate(tx *gorm.DB) error {
 	return d.BeforeSave(tx)
 }
@@ -35,7 +51,12 @@ func (d *Domain) BeforeCreate(tx *gorm.DB) error {
 func (d *Domain) AfterCreate(tx *gorm.DB) (err error) {
 	// DenyDomain
 	if d.Mode == "local" {
-		utils.DenyDomain(d.Name)
+		if _, err := utils.DenyDomain(d.Name); err != nil {
+			log.Println(err)
+		}
+		if _, err := utils.SaveRules(); err != nil {
+			log.Println(err)
+		}
 	}
 	return
 }
@@ -47,7 +68,12 @@ func (d *Domain) BeforeDelete(tx *gorm.DB) (err error) {
 
 func (d *Domain) AfterDelete(tx *gorm.DB) (err error) {
 	// AllowDomain
-	utils.AllowDomain(d.Name)
+	if _, err := utils.AllowDomain(d.Name); err != nil {
+		log.Println(err)
+	}
+	if _, err := utils.SaveRules(); err != nil {
+		log.Println(err)
+	}
 	return
 }
 

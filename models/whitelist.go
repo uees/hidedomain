@@ -1,6 +1,8 @@
 package models
 
 import (
+	"log"
+
 	"github.com/uees/hidedomain/utils"
 	"gorm.io/gorm"
 )
@@ -16,13 +18,23 @@ type Whitelist struct {
 
 func (wl *Whitelist) AfterCreate(tx *gorm.DB) (err error) {
 	// AllowIP
-	utils.AllowIP(wl.Ip)
+	if _, err := utils.AllowIP(wl.Ip); err != nil {
+		log.Println(err)
+	}
+	if _, err := utils.SaveRules(); err != nil {
+		log.Println(err)
+	}
 	return
 }
 
 func (wl *Whitelist) AfterDelete(tx *gorm.DB) (err error) {
 	// RemoveIP
-	utils.RemoveIP(wl.Ip)
+	if _, err := utils.RemoveIP(wl.Ip); err != nil {
+		log.Println(err)
+	}
+	if _, err := utils.SaveRules(); err != nil {
+		log.Println(err)
+	}
 	return
 }
 
