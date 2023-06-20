@@ -44,7 +44,9 @@ const DomainForm: React.FC = () => {
 
     const [modeValue, setModeValue] = useState<string>(data.mode);
     const onModeChange = ({ mode }: { mode: string }) => {
-        setModeValue(mode)
+        if (mode && mode !== modeValue) {
+            setModeValue(mode)
+        }
     }
 
     return (
