@@ -20,6 +20,7 @@ func initRotuer() *gin.Engine {
 	api := router.Group("/api")
 	{
 		api.POST("/token", actions.Login)
+		api.GET("/ip", actions.GetIP)
 
 		authorized := api.Group("")
 		authorized.Use(middlewares.AuthRequired())

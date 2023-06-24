@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"net"
 	"os/exec"
 	"path"
 	"runtime"
@@ -14,24 +15,19 @@ import (
 	"github.com/cloudflare/cloudflare-go"
 )
 
-func IPV4Belong(ip, cidr string) bool {
-	ipAddr := strings.Split(ip, `.`)
-	if len(ipAddr) < 4 {
-		return false
+func GenIPV4Cidr(ip string, ones int) string {
+	ipv4 := net.ParseIP(ip).To4()
+	if ipv4 != nil {
+		mask := net.CIDRMask(ones, 32)
+		return ipv4.Mask(mask).String() + "/" + strconv.Itoa(ones)
 	}
-	cidrArr := strings.Split(cidr, `/`)
-	if len(cidrArr) < 2 {
-		return false
-	}
-	var tmp = make([]string, 0)
-	for key, value := range strings.Split(`255.255.255.0`, `.`) {
-		iint, _ := strconv.Atoi(value)
 
-		iint2, _ := strconv.Atoi(ipAddr[key])
+	log.Fatal("not support ipv6")
+	return ""
+}
 
-		tmp = append(tmp, strconv.Itoa(iint&iint2))
-	}
-	return strings.Join(tmp, `.`) == cidrArr[0]
+func IsIPv4(ip string) bool {
+	return net.ParseIP(ip).To4() != nil
 }
 
 var BaseDir = func() string {
