@@ -12,9 +12,9 @@ func GetIP(c *gin.Context) {
 	cidr := utils.GenIPV4Cidr(ip, 16)
 
 	body := gin.H{
-		"IP":      c.ClientIP(),
-		"Version": "IPv4",
-		"Network": cidr,
+		"ip":      c.ClientIP(),
+		"version": "IPv4",
+		"network": cidr,
 	}
 
 	c.JSON(http.StatusOK, body)
