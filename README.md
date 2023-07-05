@@ -39,15 +39,3 @@ params:
 ### DELETE /api/domains/:domain/whitelist/:ruleid
 
 ### PATCH /api/domains/:domain/whitelist/:ruleid
-
-
-Get Lists
-    Authorization: Bearer 123
-    `https://api.cloudflare.com/client/v4/accounts/{account_identifier}/rules/lists`
-
-Get a list
-    `https://api.cloudflare.com/client/v4/accounts/{account_identifier}/rules/lists/{list_id}`
-
-Get list items
-    `https://api.cloudflare.com/client/v4/accounts/{account_identifier}/rules/lists/{list_id}/items`
-
