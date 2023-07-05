@@ -3,6 +3,7 @@ import { Button, Form, Input, Radio, } from 'antd';
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect, useLoaderData, useNavigate, useParams } from 'react-router-dom';
 import { createDomain, deleteDomain, getDomain, updateDomain } from '../../api/domain';
 import { IDomain } from '../../interfaces/models';
+import { useTitle } from '../../hooks';
 
 export async function deleteDomainAction({ params }: ActionFunctionArgs) {
     await deleteDomain(params.domain as string);
@@ -26,7 +27,7 @@ export async function loader({ params }: LoaderFunctionArgs) {
 }
 
 const DomainForm: React.FC = () => {
-
+    useTitle("添加/编辑域名");
     const { data } = useLoaderData() as { data: IDomain };
     const { domain } = useParams();
     const navigate = useNavigate()

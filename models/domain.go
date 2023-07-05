@@ -19,16 +19,18 @@ type Domain struct {
 	Memo      string `gorm:"type:varchar(256);" json:"memo"`
 }
 
-func (d *Domain) BeforeSave(tx *gorm.DB) error {
-	if d.ApiKey != "" {
-		api, ctx := utils.InitCfApi(d.ApiKey)
-		d.loadAccountID(tx, api, ctx)
-		d.loadListID(tx, api, ctx)
-	}
-	return nil
-}
-
+// AfterCreate 之后也会调用 AfterSave
 func (d *Domain) AfterSave(tx *gorm.DB) error {
+	api, ctx := utils.InitCfApi(d.ApiKey)
+	if d.AccountID == "" {
+		d.loadAccountID(api, ctx)
+		tx.Save(d)
+	}
+	if d.ListID == "" {
+		d.loadListID(api, ctx)
+		tx.Save(d)
+	}
+
 	if d.Mode == "local" {
 		if _, err := utils.AllowDomain(d.Name); err != nil {
 			log.Println(err)
@@ -42,10 +44,6 @@ func (d *Domain) AfterSave(tx *gorm.DB) error {
 	}
 
 	return nil
-}
-
-func (d *Domain) BeforeCreate(tx *gorm.DB) error {
-	return d.BeforeSave(tx)
 }
 
 func (d *Domain) AfterCreate(tx *gorm.DB) (err error) {
@@ -74,47 +72,41 @@ func (d *Domain) BeforeDelete(tx *gorm.DB) (err error) {
 	return
 }
 
-func (d *Domain) loadAccountID(tx *gorm.DB, api *cloudflare.API, ctx context.Context) {
+func (d *Domain) loadAccountID(api *cloudflare.API, ctx context.Context) {
 	if d.ApiKey == "" || d.Mode == "local" {
 		return
 	}
 	// init AccountID
-	if d.AccountID == "" {
-		params := cloudflare.AccountsListParams{}
-		accounts, _, err := api.Accounts(ctx, params)
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		// 默认获取第一个账号ID
-		d.AccountID = accounts[0].ID
-		tx.Save(d)
+	params := cloudflare.AccountsListParams{}
+	accounts, _, err := api.Accounts(ctx, params)
+	if err != nil {
+		log.Fatal(err)
 	}
+
+	// 默认获取第一个账号ID
+	d.AccountID = accounts[0].ID
 }
 
-func (d *Domain) loadListID(tx *gorm.DB, api *cloudflare.API, ctx context.Context) {
+func (d *Domain) loadListID(api *cloudflare.API, ctx context.Context) {
 	if d.ApiKey == "" || d.Mode == "local" || d.AccountID == "" {
 		return
 	}
 	// init ListID
-	if d.ListID == "" {
-		var rc = &cloudflare.ResourceContainer{
-			Level:      cloudflare.AccountRouteLevel,
-			Identifier: d.AccountID,
-		}
-		var params = cloudflare.ListListsParams{}
-		lists, err := api.ListLists(ctx, rc, params)
-		if err != nil {
-			log.Fatal(err)
-		}
+	var rc = &cloudflare.ResourceContainer{
+		Level:      cloudflare.AccountRouteLevel,
+		Identifier: d.AccountID,
+	}
+	var params = cloudflare.ListListsParams{}
+	lists, err := api.ListLists(ctx, rc, params)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-		for _, list := range lists {
-			// 默认获取 "my_ip_list"
-			if list.Name == "my_ip_list" {
-				d.ListID = list.ID
-				tx.Save(d)
-				break
-			}
+	for _, list := range lists {
+		// 默认获取 "my_ip_list"
+		if list.Name == "my_ip_list" {
+			d.ListID = list.ID
+			break
 		}
 	}
 }

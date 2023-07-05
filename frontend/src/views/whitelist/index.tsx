@@ -6,6 +6,7 @@ import { addIPRule, deleteIPRule, showList, updateIPRule } from "../../api/white
 import { EditableRow, EditableCell } from './row'
 import { getIP } from '../../api/ip';
 import './style.css';
+import { useTitle } from '../../hooks';
 
 export interface IPRuleDataType {
     key?: string | number;
@@ -31,6 +32,7 @@ type EditableTableProps = Parameters<typeof Table>[0];
 type ColumnTypes = Exclude<EditableTableProps['columns'], undefined>;
 
 const App: React.FC = () => {
+    useTitle("白名单列表");
     const { ipRules } = useLoaderData() as { ipRules: IPRuleDataType[] }
     const { domain } = useParams() as { domain: string };
     const submit = useSubmit();

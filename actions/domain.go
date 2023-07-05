@@ -2,6 +2,7 @@ package actions
 
 import (
 	"errors"
+	"log"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -57,6 +58,7 @@ func CreateDomain(c *gin.Context) {
 	}
 
 	if err := services.CreateDomain(&postData); err != nil {
+		log.Fatalln("Create Domain err")
 		c.AbortWithError(http.StatusBadRequest, err)
 		return
 	}
