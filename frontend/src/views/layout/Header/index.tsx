@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { observer } from "mobx-react-lite";
 import { Layout, Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { HomeOutlined, BulbOutlined, UserOutlined, SettingOutlined } from '@ant-design/icons';
+import { HomeOutlined, BulbOutlined, UserOutlined, SettingOutlined, GlobalOutlined } from '@ant-design/icons';
 import { useStore } from '../../../hooks';
 
 const { Header } = Layout;
@@ -23,6 +23,11 @@ const LayoutHeader: React.FC = () => {
                     label: '域名管理',
                     key: '/domains',
                     icon: <BulbOutlined />,
+                },
+                {
+                    label: '代理管理',
+                    key: '/proxies',
+                    icon: <GlobalOutlined />,
                 },
                 {
                     label: '设置',

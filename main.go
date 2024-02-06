@@ -40,6 +40,12 @@ func initRotuer() *gin.Engine {
 			authorized.GET("/domains/:domain/whitelist/:ruleid", actions.ShowIPRule)
 			authorized.DELETE("/domains/:domain/whitelist/:ruleid", actions.DeleteIPRule)
 			authorized.PATCH("/domains/:domain/whitelist/:ruleid", actions.UpdateIPRule)
+
+			authorized.GET("/proxies", actions.ProxiesList)
+			authorized.POST("/proxies", actions.CreateProxyitem)
+			authorized.GET("/proxies/:id", actions.ShowProxyitem)
+			authorized.PATCH("/proxies/:id", actions.UpdateProxyitem)
+			authorized.DELETE("proxies/:id", actions.DeleteProxyItem)
 		}
 	}
 

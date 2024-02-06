@@ -8,6 +8,11 @@ import DomainRoute, {
     deleteDomainRoute,
     editDomainRoute,
 } from "./views/domain/route";
+import ProxyItemRoute, {
+    addProxyItemRoute,
+    deleteProxyItemRoute,
+    editProxyItemRoute,
+} from "./views/proxy/route";
 import ProfileRoute from "./views/profile/route";
 import SettingsRoute from "./views/settings/route";
 import WhitelistRoute, { deleteRuleRoute } from "./views/whitelist/route";
@@ -24,6 +29,10 @@ const router = createBrowserRouter([
             { ...addDomainRoute },
             { ...editDomainRoute },
             { ...deleteDomainRoute },
+            { ...ProxyItemRoute },
+            { ...addProxyItemRoute },
+            { ...deleteProxyItemRoute },
+            { ...editProxyItemRoute },
             { ...deleteRuleRoute },
             { ...WhitelistRoute },
             { ...SettingsRoute },
