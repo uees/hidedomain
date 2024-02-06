@@ -1,6 +1,10 @@
 package services
 
 import (
+	"encoding/json"
+	"log"
+	"net"
+
 	"github.com/fatih/structs"
 	"github.com/uees/hidedomain/models"
 )
@@ -9,6 +13,35 @@ func GetAllProxies(proxies *[]models.Proxyitem) error {
 	result := db.Find(proxies)
 	if result.Error != nil {
 		return result.Error
+	}
+
+	return nil
+}
+
+func GetAllResolvedProxies(proxies *[]models.Proxyitem) error {
+	allProxies := []models.Proxyitem{}
+	err := GetAllProxies(&allProxies)
+	if err != nil {
+		return err
+	}
+
+	for _, proxyItem := range allProxies {
+		content := make(map[string]interface{})
+		err = json.Unmarshal([]byte(proxyItem.Content), &content)
+		if err != nil {
+			log.Panicln("json.Unmarshal content error", proxyItem.Memo)
+			continue
+		}
+		domain := content["add"].(string)
+		addr, err := net.ResolveIPAddr("ip6", domain)
+		if err != nil {
+			log.Panicln("net.ResolveIPAddr error", domain)
+			continue
+		}
+		content["add"] = addr.IP.String()
+		newContent, _ := json.Marshal(content)
+		proxyItem.Content = string(newContent)
+		*proxies = append(*proxies, proxyItem)
 	}
 
 	return nil

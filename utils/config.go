@@ -7,12 +7,13 @@ import (
 )
 
 type Config struct {
-	Listen    string `yaml:"listen"`
-	SecretKey string `yaml:"secret_key"`
-	Debug     bool   `yaml:"debug"`
-	DbDriver  string `yaml:"driver"`
-	DSN       string `yaml:"dsn"`
-	LogFile   string `yaml:"logfile"`
+	Listen         string `yaml:"listen"`
+	SecretKey      string `yaml:"secret_key"`
+	Debug          bool   `yaml:"debug"`
+	DbDriver       string `yaml:"driver"`
+	DSN            string `yaml:"dsn"`
+	LogFile        string `yaml:"logfile"`
+	SubscribeToken string `yaml:"subscribe_token"`
 	//KeyMap    map[string]string `yaml:"keymap"`
 }
 

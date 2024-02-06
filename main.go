@@ -21,6 +21,7 @@ func initRotuer() *gin.Engine {
 	{
 		api.POST("/token", actions.Login)
 		api.GET("/ip", actions.GetIP)
+		api.GET("/subscribe", actions.Subscription)
 
 		authorized := api.Group("")
 		authorized.Use(middlewares.AuthRequired())
@@ -50,7 +51,7 @@ func initRotuer() *gin.Engine {
 	}
 
 	router.NoRoute(func(c *gin.Context) {
-		c.HTML(http.StatusNotFound, "404.html", nil)
+		c.String(http.StatusNotFound, "404 not found!")
 	})
 
 	return router

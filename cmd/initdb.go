@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	utils.DB.AutoMigrate(&models.User{}, &models.Whitelist{}, &models.Option{}, &models.Domain{})
+	utils.DB.AutoMigrate(&models.User{}, &models.Whitelist{}, &models.Option{}, &models.Domain{}, &models.Proxyitem{})
 
 	var user models.User
 	result := utils.DB.First(&user, "username = ?", "admin")

@@ -73,7 +73,7 @@ const ProxyItemForm: React.FC = () => {
                 name='content'
                 rules={[{ required: true, message: 'Please input your content!' }]}
             >
-                <Input.TextArea rows={20} maxLength={26} />
+                <Input.TextArea rows={20} />
             </Form.Item>
 
             <Form.Item wrapperCol={{ offset: 4 }}>
