@@ -19,4 +19,4 @@ data/
 config.yml
 tmp/
 *.log
-/buid/*
+/build/*
