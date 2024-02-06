@@ -13,8 +13,7 @@ export async function deleteProxyItemAction({ params }: ActionFunctionArgs) {
 export async function loader({ params }: LoaderFunctionArgs) {
     const proxyItem: IProxyItem = {
         content: '',
-        protocol: '',
-        memo: '',
+        protocol: ''
     }
 
     if (params.id) {
@@ -56,14 +55,6 @@ const ProxyItemForm: React.FC = () => {
                 label="协议"
                 name='protocol'
                 rules={[{ required: true, message: 'Please input your protocol!' }]}
-            >
-                <Input />
-            </Form.Item>
-
-            <Form.Item
-                label="标题"
-                name='memo'
-                rules={[{ required: true, message: 'Please input your memo!' }]}
             >
                 <Input />
             </Form.Item>
