@@ -56,8 +56,13 @@ func QueryProxyItem(id uint, proxyItem *models.Proxyitem) error {
 }
 
 func CreateProxyItem(data *models.ProxyitemForm) error {
+	content := make(map[string]interface{})
+	err := json.Unmarshal([]byte(data.Content), &content)
+	if err != nil {
+		return err
+	}
 	result := db.Create(&models.Proxyitem{
-		Memo:     data.Memo,
+		Memo:     content["ps"].(string),
 		Content:  data.Content,
 		Protocol: data.Protocol,
 	})
@@ -71,7 +76,14 @@ func UpdateProxyItem(id uint, data *models.ProxyitemForm) error {
 		return result.Error
 	}
 
-	if result := db.Model(&proxyItem).Updates(structs.Map(data)); result.Error != nil {
+	content := make(map[string]interface{})
+	err := json.Unmarshal([]byte(data.Content), &content)
+	if err != nil {
+		return err
+	}
+	theUpdateData := structs.Map(data)
+	theUpdateData["Memo"] = content["ps"].(string)
+	if result := db.Model(&proxyItem).Updates(theUpdateData); result.Error != nil {
 		return result.Error
 	}
 

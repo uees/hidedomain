@@ -34,10 +34,10 @@ const Proxyitem: React.FC = () => {
             title: '协议',
             dataIndex: 'protocol',
             key: 'protocol',
-            render: (_, { id, memo }) => (
+            render: (_, { id, protocol }) => (
                 <a onClick={() => {
                     submit(null, { method: "get", action: `/proxies/${id}/edit` })
-                }}>{memo}</a>
+                }}>{protocol}</a>
             ),
         },
         {

@@ -10,6 +10,5 @@ type Proxyitem struct {
 
 type ProxyitemForm struct {
 	Content  string `json:"content" binding:"required"`
-	Memo     string `json:"memo" binding:"required"`
 	Protocol string `json:"protocol"`
 }
