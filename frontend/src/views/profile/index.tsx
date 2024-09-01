@@ -6,7 +6,10 @@ const Profile: React.FC = () => {
     useTitle('个人信息')
 
     return (
-        <div>Hello, Profile</div>
+        <>
+        <h3>个人信息</h3>
+        <div>开发中...  by wan</div>
+        </>
     )
 }
 

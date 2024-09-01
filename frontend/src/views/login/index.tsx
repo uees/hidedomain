@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { Form, Input, Button, message, Spin } from "antd";
 import { useStore, useTitle } from "../../hooks";
@@ -7,13 +7,13 @@ import "../../styles/login.css";
 const Login: React.FC = () => {
 
     useTitle('Login')
-    const { user, site } = useStore()
+    const { user } = useStore()
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        site.setMenu([{ label: '登录', key: '/login', }])
-    })
+    //useEffect(() => {
+    //    site.setMenu([{ label: '登录', key: '/login', }])
+    //})
 
     const handleLogin = async (username: string, password: string) => {
         setLoading(true);

@@ -1,16 +1,17 @@
 import React from 'react';
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useStore } from "../hooks";
 
 export const CheckPermission: React.FC = () => {
     const { user } = useStore()
+    const location = useLocation()
 
-    if (user.token) {
-        return null;
+    if (!user.token && location.pathname !== "/") {
+        user.logout()
+        return (
+            <Navigate replace to='/login' />
+        )
     }
 
-    user.logout()
-    return (
-        <Navigate replace to='/login' />
-    )
+    return null
 }

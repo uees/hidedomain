@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { observer } from "mobx-react-lite";
 import { Layout, Menu } from 'antd';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { HomeOutlined, BulbOutlined, UserOutlined, SettingOutlined, GlobalOutlined } from '@ant-design/icons';
 import { useStore } from '../../../hooks';
 
@@ -35,38 +35,43 @@ const LayoutHeader: React.FC = () => {
                     icon: <SettingOutlined />,
                 },
                 {
-                    label: '个人设置',
+                    label: user.username,
                     key: '/profile#user',
                     icon: <UserOutlined />,
                     children: [
                         {
-                            label: 'Profile',
+                            label: '个人信息',
                             key: '/profile',
                         },
                         {
-                            label: '退出系统',
+                            label: '登出',
                             key: '/logout',
                         },
                     ]
                 },
             ])
         }
-    }, [site, user.token])
+    }, [site, user.token, user.username])
 
     const navigate = useNavigate();
 
     const handleClick = ({ key }: { key: string }) => {
         if (key === "/logout") {
             user.logout()
-            return navigate("/login", { replace: true })
+            site.setMenu([])
+            return navigate("/", { replace: true })
         }
         return navigate(key)
     }
 
     return (
-        <Header>
-            <div className="demo-logo" />
-            <Menu theme="dark" mode="horizontal" items={site.menuItems} onClick={handleClick} />
+        <Header style={{ display: 'flex', alignItems: 'center' }}>
+            <div className="demo-logo"><Link to="/">Private Cloud</Link></div>
+            <Menu theme="dark"
+                mode="horizontal"
+                items={site.menuItems}
+                onClick={handleClick}
+                style={{ flex: 1, minWidth: 0 }} />
         </Header>
     )
 }
