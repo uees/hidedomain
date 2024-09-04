@@ -21,17 +21,17 @@ type Domain struct {
 
 // AfterCreate 之后也会调用 AfterSave
 func (d *Domain) AfterSave(tx *gorm.DB) error {
-	api, ctx := utils.InitCfApi(d.ApiKey)
-	if d.AccountID == "" {
-		d.loadAccountID(api, ctx)
-		tx.Save(d)
-	}
-	if d.ListID == "" {
-		d.loadListID(api, ctx)
-		tx.Save(d)
-	}
-
-	if d.Mode == "local" {
+	if d.Mode == "cf" {
+		api, ctx := utils.InitCfApi(d.ApiKey)
+		if d.AccountID == "" {
+			d.loadAccountID(api, ctx)
+			tx.Save(d)
+		}
+		if d.ListID == "" {
+			d.loadListID(api, ctx)
+			tx.Save(d)
+		}
+	} else if d.Mode == "local" {
 		if _, err := utils.AllowDomain(d.Name); err != nil {
 			log.Println(err)
 		}
